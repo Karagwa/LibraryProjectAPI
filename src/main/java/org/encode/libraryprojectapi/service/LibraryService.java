@@ -66,11 +66,17 @@ public class LibraryService {
         bookRepository.deleteById(id);
     }
 
-    public Member createMember(MemberCreationRequest request) {
-        Member member = new Member();
-        BeanUtils.copyProperties(request, member);
-        member.setStatus(MemberStatus.ACTIVE);
-        return memberRepository.save(member);
+    public String createMember(List<MemberCreationRequest> request) {
+
+
+        request.forEach(r->{
+            Member member = new Member();
+            BeanUtils.copyProperties(r, member);
+            member.setStatus(MemberStatus.ACTIVE);
+            memberRepository.save(member);
+        });
+
+        return "Successfully Added";
     }
 
     public Member updateMember (String id, MemberCreationRequest request) {
