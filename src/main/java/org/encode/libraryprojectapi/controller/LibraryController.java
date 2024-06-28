@@ -48,7 +48,7 @@ public class LibraryController {
     }
 
     @PostMapping("/member")
-    public ResponseEntity<Member> createMember (@RequestBody MemberCreationRequest request) {
+    public ResponseEntity<String> createMember (@RequestBody List<MemberCreationRequest> request) {
         return ResponseEntity.ok(libraryService.createMember(request));
     }
 
