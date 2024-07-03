@@ -11,6 +11,8 @@ import org.encode.libraryprojectapi.repository.AuthorRepository;
 import org.encode.libraryprojectapi.repository.BookRepository;
 import org.encode.libraryprojectapi.repository.LendRepository;
 import org.encode.libraryprojectapi.repository.MemberRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class LibraryService {
+    private static final Logger logger= LoggerFactory.getLogger(LibraryService.class);
 
     private final AuthorRepository authorRepository;
     private final MemberRepository memberRepository;
@@ -33,6 +36,7 @@ public class LibraryService {
 
     public Book readBookById(String id) {
         Optional<Book> book = bookRepository.findById(id);
+        logger.debug("Reading book with id {}", id);
         if (book.isPresent()) {
             return book.get();
         }
@@ -40,11 +44,13 @@ public class LibraryService {
     }
 
     public List<Book> readBooks() {
+        logger.debug("Reading all the books in the library");
         return bookRepository.findAll();
     }
 
     public Book readBook(String isbn) {
         Optional<Book> book = bookRepository.findByIsbn(isbn);
+        logger.debug("Reading book with ISBN{}", isbn);
         if (book.isPresent()) {
             return book.get();
         }
@@ -52,6 +58,7 @@ public class LibraryService {
     }
 
     public Book createBook(BookCreationRequest book) {
+        logger.debug("Creating a book record");
         Optional<Author> author = authorRepository.findById(book.getAuthorId());
         if (!author.isPresent()) {
             throw new EntityNotFoundException("Author Not Found");
@@ -63,11 +70,12 @@ public class LibraryService {
     }
 
     public void deleteBook(String id) {
+        logger.debug("Deleting book with ID: {}", id);
         bookRepository.deleteById(id);
     }
 
     public String createMember(List<MemberCreationRequest> request) {
-
+        logger.debug("Creating members with request: {}", request);
 
         request.forEach(r->{
             Member member = new Member();
@@ -80,6 +88,7 @@ public class LibraryService {
     }
 
     public Member updateMember (String id, MemberCreationRequest request) {
+        logger.debug("Updating member with ID: {} and request{}", id, request);
         Optional<Member> optionalMember = memberRepository.findById(id);
         if (!optionalMember.isPresent()) {
             throw new EntityNotFoundException("Member not present in the database");
@@ -91,13 +100,14 @@ public class LibraryService {
     }
 
     public Author createAuthor (AuthorCreationRequest request) {
+        logger.debug("Creating an author with request{}", request);
         Author author = new Author();
         BeanUtils.copyProperties(request, author);
         return authorRepository.save(author);
     }
 
     public List<String> lendABook (BookLendRequest request) {
-
+        logger.debug("Lending a book with request{}" ,request);
         Optional<Member> memberForId = memberRepository.findById(request.getMemberId());
         if (!memberForId.isPresent()) {
             throw new EntityNotFoundException("Member not present in the database");
