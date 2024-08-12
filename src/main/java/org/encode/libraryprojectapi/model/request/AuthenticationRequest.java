@@ -1,4 +1,4 @@
-package org.encode.libraryprojectapi.Security;
+package org.encode.libraryprojectapi.model.request;
 
 import lombok.Getter;
 import lombok.Setter;
