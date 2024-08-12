@@ -3,14 +3,19 @@ package org.encode.libraryprojectapi.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Getter
 @Setter
-@Document
+@Document(collection = "authors")
 public class Author {
     @Id
-    private String id;
+    @ReadOnlyProperty
+    @DocumentReference(lookup = "{'authorId':?#{#self._id}}")
+    private String authorId;
+
     private String firstName;
     private String lastName;
 

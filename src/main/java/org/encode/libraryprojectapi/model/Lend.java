@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Document
+@Document(collection = "lendedBooks")
 public class Lend {
 
     @Id
