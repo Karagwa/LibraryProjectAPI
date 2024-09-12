@@ -36,11 +36,10 @@ public class MemberController {
         return ResponseEntity.ok(libraryService.readBookById(bookId));
     }
 
-//    @GetMapping("/book/author/{authorId}")
-//    public ResponseEntity<List<Book>> findBooksByAuthor(@PathVariable String authorId){
-//        List<Book> books= libraryService.findBooksByAuthorId(authorId);
-//        return ResponseEntity.ok(books);
-//    }
+    @GetMapping("/book/by/author/{authorId}")
+    public ResponseEntity<?> readBooksByAuthor(@PathVariable String authorId){
+        return ResponseEntity.ok(libraryService.readBooksByAuthor(authorId));
+    }
 
     @PostMapping("/book/borrow")
     public ResponseEntity<List<String>> borrowABook(@RequestBody BookLendRequest bookLendRequests) {
