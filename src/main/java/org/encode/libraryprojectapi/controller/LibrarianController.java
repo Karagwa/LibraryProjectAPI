@@ -123,12 +123,6 @@ public class LibrarianController {
         return ResponseEntity.ok(libraryService.readAuthors());
     }
 
-//    @DeleteMapping("/delete/author/{authorId}")
-//    public ResponseEntity<Void> deleteAuthor(@PathVariable String authorId) {
-//        logger.info("Deleting author with id: {}", authorId);
-//        libraryService.deleteBook(authorId);
-//        return ResponseEntity.ok().build();
-//    }
     @GetMapping("/librarian/{id}")
     public Librarian getLibrarian(@PathVariable String id) {
         return librarianRepository.findById(id).orElseThrow(() -> new RuntimeException("Librarian not found"));
