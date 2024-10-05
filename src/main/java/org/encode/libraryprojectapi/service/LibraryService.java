@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +34,7 @@ public class LibraryService {
     private final BookRepository bookRepository;
     private final MongoTemplate mongoTemplate;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
 
     //book logic
@@ -113,6 +112,7 @@ public class LibraryService {
             member.setPassword(passwordEncoder.encode(request.getPassword()));
             member.setFirstName(request.getFirstName());
             member.setLastName(request.getLastName());
+            member.setEmail(request.getEmail());
             member.setRole(Role.ROLE_MEMBER);
             member.setStatus(MemberStatus.ACTIVE);
             memberRepository.save(member);
@@ -254,6 +254,12 @@ public class LibraryService {
             }
 
         });
+        Map<String, Object> emailModel= new HashMap<>();
+        emailModel.put("memberName", member.getLastName());
+        emailModel.put("books", booksApprovedToBurrow);
+        emailModel.put("dueDate", Instant.now().plus(7,ChronoUnit.DAYS));
+        emailService.sendEmail(member.getEmail(), "Book borrowed", emailModel);
+
         return booksApprovedToBurrow;
     }
 
