@@ -20,5 +20,6 @@ public class Member {
     private String lastName;
     private Role role;
     private MemberStatus status;
+    private String email;
     private List<String> borrowedBooks= new ArrayList<>();
 }
